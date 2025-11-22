@@ -18,7 +18,7 @@ if mode_of_transport == 'car':
    if fuel_type == 'Petrol':
       fuel_consumed = .065*travel_dis
       print(fuel_consumed)
-   elif mode_of_transport == bicycle:
+   elif mode_of_transport == 'bicycle':
       fuel_consumed = 0.0*travel_dis
       print(fuel_consumed)
    else:
