@@ -1,4 +1,5 @@
-electricity = float(input('What your today electricity consumption (kWh): '))
+print("Please enter the values for today ")
+electricity = float(input('What was your electricity consumption today (kWh): '))
 cooking_fuel = float(input("What's your cooking fuel usage (LPG cylinders / PNG units):"))
 air_cond_rating = int(input("Enter whether 3 or 5 stars: "))
 air_conditioner_usage = float(input("How many hours did you use air conditionar for: ")) 
