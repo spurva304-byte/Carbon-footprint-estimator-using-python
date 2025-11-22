@@ -1,27 +1,30 @@
-emission_factor = {"electricity": 0.82, "meat": 26, "petrol": 2.31, "shopping": 0.45, "waste": 1.5, "tech": 0.06}
-print()
-
-electricity = float(input('Enter electricity used (kWh per month): '))
-meat = float(input('Enter meat eaten per month: '))
-petrol = float(input('Enter petrol used( liters per month: '))
-shopping = float(input('Enter shopping spending (rs. per month): '))
-waste = float(input('Enter waste generated (kg per month): '))
-screen_hours = float(input('Enter daily screen used(hours): '))
-print()
-
-
-total = (electricity * emission_factor["electricity"] + 
-         meat * emission_factor["meat"] + 
-         petrol * emission_factor["petrol"] + 
-         shopping * emission_factor["shopping"] + 
-         waste * emission_factor["waste"] +
-         screen_hours * emission_factor["tech"])  
-
-print("calculate the co2 carbon footprint")
-3
-if total < 500:
-    print("low co2 footprint")
-elif total < 1000:
-    print("medium c02 footprint")
+electricity = float(input('What your today electricity consumption (kWh): '))
+cooking_fuel = float(input("What's your cooking fuel usage (LPG cylinders / PNG units):"))
+air_cond_rating = int(input("Enter whether 3 or 5 stars: "))
+air_conditioner_usage = float(input("How many hours did you use air conditionar for: ")) 
+if air_cond_rating == 3:
+   usage = 1.5*air_conditioner_usage
+   print(usage, "units")
 else:
-    print("high co2 footprint")
+   usage = 1.2*air_conditioner_usage
+   print(usage, "units")
+
+travel_dis = float(input("Daily travel distance (km): "))
+print(travel_dis, "km")
+mode_of_transport = str(input("Enter your vehicle for transportation(car/public vehicle/scooter/bicycle): "))
+if mode_of_transport == 'car':
+   fuel_type = str(input("Enter Petrol/Diesel: "))
+   if fuel_type == 'Petrol':
+      fuel_consumed = .065*travel_dis
+      print(fuel_consumed)
+   elif mode_of_transport == bicycle:
+      fuel_consumed = 0.0*travel_dis
+      print(fuel_consumed)
+   else:
+      fuel_consumed = 0.055*travel_dis
+      print(fuel_consumed)
+else:
+   fuel_consumed_per_person = 0.033*travel_dis
+   print(fuel_consumed_per_person)
+
+    
