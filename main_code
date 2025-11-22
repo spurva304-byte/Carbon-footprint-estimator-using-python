@@ -1,0 +1,27 @@
+emission_factor = {"electricity": 0.82, "meat": 26, "petrol": 2.31, "shopping": 0.45, "waste": 1.5, "tech": 0.06}
+print()
+
+electricity = float(input('Enter electricity used (kWh per month): '))
+meat = float(input('Enter meat eaten per month: '))
+petrol = float(input('Enter petrol used( liters per month: '))
+shopping = float(input('Enter shopping spending (rs. per month): '))
+waste = float(input('Enter waste generated (kg per month): '))
+screen_hours = float(input('Enter daily screen used(hours): '))
+print()
+
+
+total = (electricity * emission_factor["electricity"] + 
+         meat * emission_factor["meat"] + 
+         petrol * emission_factor["petrol"] + 
+         shopping * emission_factor["shopping"] + 
+         waste * emission_factor["waste"] +
+         screen_hours * emission_factor["tech"])  
+
+print("calculate the co2 carbon footprint")
+3
+if total < 500:
+    print("low co2 footprint")
+elif total < 1000:
+    print("medium c02 footprint")
+else:
+    print("high co2 footprint")
