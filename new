@@ -1,0 +1,25 @@
+"""values we need :
+that day's electricity consumption (kWh)
+Cooking fuel usage (LPG cylinders / PNG units)
+average ac usage per day (then multiply this by average units consumed by ac then calculate carbon footprint)
+
+Daily travel distance (km)
+Mode of transport (bike/car/bus/auto/metro)- we'll use individual vehicle and then use regex to deploy data for different vehicle
+Fuel type (petrol/diesel/CNG/electric)
+Monthly fuel consumption (litres)
+flights taken and for how much distance (first use boolean then if that is true then we go to calculate value)
+
+Diet type (veg / non-veg / vegan)
+fast food and junk(people can only tell if yes or no then we take an estimate about how much carbon is emitted)
+if non veg then 
+meat intake
+Packaged food usage
+
+
+Waste generated daily (we'll ask for bags or a standard dustbin size then use standard values
+Approx plastic waste per week (grams)
+Daily screen time (hours)
+Charging habits (use standard data)
+
+
+
