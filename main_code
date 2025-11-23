@@ -28,4 +28,7 @@ else:
    fuel_consumed_per_person = 0.033*travel_dis
    print(fuel_consumed_per_person)
 
+water_usuage = float(input("Enter litres of water utilised: "))
+
+
     
