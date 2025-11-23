@@ -1,6 +1,11 @@
+ print("-------------------------------------------------------")
+ print("         CARBON FOOTPRINT ESTIMATOR ")
+ print("-------------------------------------------------------")
 print("Please enter the values for today ")
+emission_factor = {"electricity": 0.82, "air_conditioner":0.7, "meat": 26, "petrol": 2.31, "shopping": 0.45, "waste": 1.5, "tech": 0.06}
+#Values and inputs required
 electricity = float(input('What was your electricity consumption today (kWh): '))
-cooking_fuel = float(input("What's your cooking fuel usage (LPG cylinders / PNG units):"))
+#cooking_fuel = float(input("What's your cooking fuel usage (LPG cylinders units):"))
 air_cond_rating = int(input("Enter whether 3 or 5 stars: "))
 air_conditioner_usage = float(input("How many hours did you use air conditionar for: ")) 
 if air_cond_rating == 3:
@@ -31,4 +36,8 @@ else:
 water_usuage = float(input("Enter litres of water utilised: "))
 
 
-    
+co2_electricity = electricity*emission_factor["electricity"]
+print(co2_electricity)    
+
+co2_ac = usage*emission_factor["air_conditioner"]
+print(co2_ac)
