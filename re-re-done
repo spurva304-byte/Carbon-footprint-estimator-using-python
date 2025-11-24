@@ -1,0 +1,145 @@
+import re
+def get_alpha(prompt):
+    """Accept only alphabetic characters (A–Z / a–z and spaces)."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"[A-Za-z\s]+", value):
+            return re.sub(r"\s+", " ", value).title()  # clean formatting
+        print("❌ Only letters (A–Z) allowed. Try again.")
+
+
+def get_yes_no(prompt):
+    """Accept only yes/no."""
+    while True:
+        value = input(prompt).strip().lower()
+        if re.fullmatch(r"(yes|y|no|n)", value):
+            return "yes" if value.startswith("y") else "no"
+        print("❌ Type yes or no.")
+
+
+def get_number(prompt):
+    """Accept positive float values."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"\d+(\.\d+)?", value):
+            return float(value)
+        print("❌ Enter a valid number (example: 10 or 10.5)")
+
+
+def get_int(prompt):
+    """Accept integer values."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"\d+", value):
+            return int(value)
+        print("❌ Enter a whole number only.")
+
+
+def get_choice(prompt, options):
+    """Accept ONLY choices given in 'options' list."""
+    pattern = r"(" + "|".join(options) + r")"
+    while True:
+        value = input(prompt).strip().lower()
+        if re.fullmatch(pattern, value):
+            return value
+        print(f"❌ Enter one of: {', '.join(options)}")
+
+
+print("\n ♻️🌱👣 CARBON FOOTPRINT ESTIMATOR 👣🌱♻️\n")
+
+#Intro
+
+name = get_alpha("Enter your name: ")
+age = get_int("Enter your age: ")
+state = get_alpha("Enter your state: ")
+
+
+#electricity and fuel consumption
+print("\n----- ELECTRICITY & HOME ENERGY -----\n")
+
+electricity = get_number('What your today electricity consumption (kWh): ')
+cooking_fuel = get_number("What's your cooking fuel usage (LPG cylinders / PNG units):")
+
+air_cond_rating = get_choice("Enter whether your air conditioner is rated 3 or 5 stars: ", ["3", "5"])
+air_conditioner_usage = get_number("How many hours did you use air conditioner for: ")
+if air_cond_rating == 3:
+   usage = 1.5*air_conditioner_usage
+   print(usage, "units")
+else:
+   usage = 1.2*air_conditioner_usage
+   print(usage, "units")
+
+#Transportation
+print("\n----- TRANSPORTATION -----\n")
+
+travel_dis = get_number("Daily travel distance (km): ")
+mode_of_transport = get_choice("Enter your vehicle for transportation(car/public vehicle/scooter/bicycle): ", ["car", "public vehicle", "scooter", "bicycle"])
+if mode_of_transport == 'car':
+   fuel_type = get_choice("Enter Petrol/Diesel: ", ["Petrol", "Diesel"])
+   if fuel_type == 'Petrol':
+      fuel_consumed_car = .065*travel_dis
+      print(fuel_consumed_car)
+ 
+   else:
+      fuel_consumed_car = 0.055*travel_dis
+      print(fuel_consumed_car, "litres")
+elif mode_of_transport == 'scooter':
+    fuel_consumed_scooter = 0.033*travel_dis
+    print(fuel_consumed_scooter, "litres")
+elif mode_of_transport == 'bicycle':
+      fuel_consumed_bicycle = 0.0*travel_dis
+      print(fuel_consumed_bicycle)
+else:
+   fuel_consumed = 0.0*travel_dis
+   print(fuel_consumed, "litres")
+
+
+#flights taken and for how much distance 
+take_flights = get_yes_no("\nDo you take flights? (yes/no): ")
+
+if take_flights == "yes":
+    domestic_flights = get_int("Number of domestic flights per year: ")
+    international_flights = get_int("Number of international flights per year: ")
+    avg_flight_distance = get_number("Average distance of each flight (km): ")
+
+    fuel_consumed_flight_domestic = domestic_flights * average distance * 3
+    fuel_consumed_flight_domestic = domestic_flights * average distance * 12
+
+print("\n----- FOOD CONSUMPTION -----\n")
+
+#non veg
+eat_meat = get_choice("Do you eat meat (yes/no): " , ["yes", "no"])
+if eat_meat == "yes":
+    meat_type = get_choice("Meat type (chicken/mutton/fish/eggs/mixed): ",
+                           ["chicken", "mutton", "fish", "eggs", "mixed"])
+    meat_kg_month = get_number("Kg of meat per month: ")
+
+fast_food_meals = get_int("Fast-food meals per week: ")
+
+print("All inputs collected")
+print("------Formula for calculation-----")
+print("Carbon Emission = Activity Data * Emission Factor")
+emission_factor = {"electricity": 0.82, "meat": 26, , "shopping": 0.45, "waste": 1.5, "tech": 0.06, "air_conditioner":0.70, "scooter":0.03904
+                  ,"car": 0.157, "airplane": 0.24587}
+
+print("------- Calculation for carbon footprint is as follows -------")
+
+co2_electricity = electricity * emission_factor["electricity"]
+print("Your estimated carbon footprint due to electricity usage is : ", co2_electricity, "CO2e")
+
+co2_airconditioner = usage *emission_factor["air_conditioner"]
+print("Your estimated carbon footprint due to airconditioner usage is : ", co2_airconditioner , "CO2e")
+
+co2_electricity_all = co2_electricity + co2_airconditioner
+print("Your overall estimated carbon footprint due to electricity is: ", co2_electricity_all , "CO2e")
+
+co2_scooter = fuel_consumed_scooter * emission_factor["scooter"]
+print("Your estimated carbon footprint due to scooter is: ", co2_scooter , "CO2e")
+    
+co2_car = fuel_consumed_car * emission_factor["car"]
+print("Your estimated carbon footprint due to car is: ", co2_car , "CO2e")
+
+co2_flight = (fuel_consumed_domestic+fuel_consumed_international) * emission factor["airplane"]
+        
+co2_transportation = co2_scooter+co2_car
+print("Your overall estimated carbon footprint due to transportation is: ", co2_transportation , "CO2e")
