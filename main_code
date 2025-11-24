@@ -110,8 +110,11 @@ if eat_meat == "yes":
 fast_food_meals = get_int("Fast-food meals per week: ")
 
 print("All inputs collected")
+
 print("------Formula for calculation-----")
+
 print("Carbon Emission = Activity Data * Emission Factor")
+
 emission_factor = {"electricity": 0.82, "meat": 26, "petrol": 2.31, "shopping": 0.45, "waste": 1.5, "tech": 0.06, "air_conditioner":0.70}
 
 print("------- Calculation for carbon footprint is as follows -------")
@@ -122,3 +125,5 @@ print("Your estimated carbon footprint due to electricity usage is : ", co2_elec
 co2_airconditioner = usage *emission_factor["air_conditioner"]
 print("Your estimated carbon footprint due to airconditioner usage is : ", co2_airconditioner , "CO2e")
 
+co2_electricity_all = co2_electricity + co2_airconditioner
+print("Your overall estimated carbon footprint due to electricity is: ", co2_electricity_all , "CO2e")
