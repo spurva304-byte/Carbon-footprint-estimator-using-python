@@ -21,6 +21,12 @@ Approx plastic waste per week (grams)
 Daily screen time (hours)
 Charging habits (use standard data)
 
+co2_electricity = electricity*emission_factor["electricity"]
+print(co2_electricity)    
+
+co2_ac = usage*emission_factor["air_conditioner"]
+print(co2_ac)
+
 dataset
 cleaning
 comparison
