@@ -1,0 +1,280 @@
+import re
+
+#creation of function to help with proper input(uses regex)
+
+def get_alpha(prompt):
+    """Accept only alphabetic characters (A–Z / a–z and spaces)."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"[A-Za-z\s]+", value):
+            return re.sub(r"\s+", " ", value).title()
+        print("❌ Only letters allowed. Try again.")
+
+def get_yes_no(prompt):
+    """Accept only yes/no."""
+    while True:
+        value = input(prompt).strip().lower()
+        if value in ["yes", "y", "no", "n"]:
+            return "yes" if value.startswith("y") else "no"
+        print("❌ Type yes or no.")
+
+def get_number(prompt):
+    """Accept positive float values."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"\d+(\.\d+)?", value):
+            return float(value)
+        print("❌ Enter a valid number.")
+
+def get_int(prompt):
+    """Accept integer values."""
+    while True:
+        value = input(prompt).strip()
+        if re.fullmatch(r"\d+", value):
+            return int(value)
+        print("❌ Enter a whole number.")
+
+def get_choice(prompt, options):
+    """Accept only listed options."""
+    pattern = r"(" + "|".join(options) + r")"
+    while True:
+        value = input(prompt).strip().lower()
+        if re.fullmatch(pattern, value):
+            return value
+        print(f"❌ Enter one of: {', '.join(options)}")
+
+
+print("\n ♻🌱👣 CARBON FOOTPRINT ESTIMATOR 👣🌱♻\n")
+
+#Intro
+
+name = get_alpha("Enter your name: ")
+age = get_int("Enter your age: ")
+state = get_alpha("Enter your state: ")
+
+#electricity and fuel consumption
+print("\n 🔌ELECTRICITY & HOME ENERGY 🔌 \n")
+
+electricity = get_number("Today's electricity consumption (kWh): ")
+cooking_fuel = get_number("Monthly LPG (cylinders) or PNG units used: ")
+
+air_cond_rating = get_choice("Is your AC 3-star or 5-star? (3/5): ", ["3", "5"])
+air_conditioner_usage = get_number("AC usage hours today: ")
+
+if air_cond_rating == "3":
+    usage = 1.5 * air_conditioner_usage     # kWh
+    print(usage, "units")
+else:
+    usage = 1.2 * air_conditioner_usage     # kWh
+    print(usage, "units")
+
+#Transportation
+print("\n 🚌 TRANSPORTATION 🚌 \n")
+
+travel_dis = get_number("Daily travel distance (km): ")
+
+mode_of_transport = get_choice(
+    "Vehicle type (car/public vehicle/scooter/bicycle): ",
+    ["car", "public vehicle", "scooter", "bicycle"]
+)
+
+fuel_consumed_car = 0
+fuel_consumed_scooter = 0
+fuel_consumed_public = 0
+
+if mode_of_transport == "car":
+    fuel_type = get_choice("Fuel type (petrol/diesel): ", ["petrol", "diesel"])
+    
+    if fuel_type == "petrol":
+        fuel_consumed_car = 0.065 * travel_dis
+    else:
+        fuel_consumed_car = 0.055 * travel_dis
+
+elif mode_of_transport == "scooter":
+    fuel_consumed_scooter = 0.033 * travel_dis
+
+elif mode_of_transport == "public vehicle":
+    fuel_consumed_public = 0.0  
+else:
+    fuel_consumed_bicycle = 0  
+
+#flights taken and for how much distance 
+take_flights = get_yes_no("\nDo you take flights? (yes/no): ")
+
+fuel_consumed_domestic = 0
+fuel_consumed_international = 0
+
+if take_flights == "yes":
+    domestic_flights = get_int("Domestic flights per year: ")
+    international_flights = get_int("International flights per year: ")
+    avg_flight_distance = get_number("Average distance per flight (km): ")
+
+    fuel_consumed_domestic = domestic_flights * avg_flight_distance * 3
+    fuel_consumed_international = international_flights * avg_flight_distance * 12
+
+print("\n 🍽 FOOD CONSUMPTION 🍽 \n")
+
+eat_meat = get_choice("Do you eat meat? (yes/no): ", ["yes", "no"])
+
+meat_kg_month = 0
+
+if eat_meat == "yes":
+    meat_type = get_choice(
+        "Meat type (chicken/mutton/fish/eggs/mixed): ",
+        ["chicken", "mutton", "fish", "eggs", "mixed"]
+    )
+    meat_kg_month = get_number("Kg of meat per month: ")
+
+fast_food_meals = get_int("Fast-food meals per week: ")
+
+print("\nAll inputs collected.")
+print("\n------Formula------")
+print("Carbon Emission = Activity Data × Emission Factor\n")
+
+#Emission factors
+
+emission_factor = {
+    "electricity": 0.82,        # kg CO2 per kWh
+    "lpg": 2.98 * 14.2,         # 1 cylinder ≈ 42.3 kg CO₂
+    "png": 2.1,                 # kg CO₂ per cubic meter
+    "air_conditioner": 0.70,    
+    "scooter": 2.31,            # kg CO₂ per litre petrol
+    "car_petrol": 2.31,
+    "car_diesel": 2.68,
+    "bus": 0.102,               # kg per passenger-km
+    "bicycle": 0,
+    "airplane": 3.16,           # kg CO₂ per litre jet fuel
+    "meat": 26,                 # kg CO₂ per kg mixed meat
+    "fast_food": 4              # kg CO₂ per meal (avg)
+}
+
+print("------- CARBON FOOTPRINT RESULTS -------\n")
+
+# Electricity
+co2_electricity = electricity * emission_factor["electricity"]
+co2_ac = usage * emission_factor["air_conditioner"]
+total_electricity = co2_electricity + co2_ac
+
+print("Electricity CO₂:", co2_electricity)
+print("AC CO₂:", co2_ac)
+print("Total electricity CO₂:", total_electricity)
+
+#Cooking fuel 
+co2_cooking = cooking_fuel * emission_factor["lpg"]   # assume LPG
+
+print("Cooking fuel CO₂:", co2_cooking)
+
+#transportation
+co2_car = 0
+co2_scooter = 0
+co2_public = 0
+
+if mode_of_transport == "car":
+    if fuel_type == "petrol":
+        co2_car = fuel_consumed_car * emission_factor["car_petrol"]
+    else:
+        co2_car = fuel_consumed_car * emission_factor["car_diesel"]
+
+if mode_of_transport == "scooter":
+    co2_scooter = fuel_consumed_scooter * emission_factor["scooter"]
+
+if mode_of_transport == "public vehicle":
+    co2_public = travel_dis * emission_factor["bus"]
+# Flights
+co2_flights = (fuel_consumed_domestic + fuel_consumed_international) * emission_factor["airplane"]
+print("Flights CO₂:", co2_flights)
+
+co2_transport = co2_car + co2_scooter + co2_public+ co2_flights
+
+print("Transport CO₂:", co2_transport)
+
+
+
+#Food
+co2_meat = meat_kg_month * emission_factor["meat"]
+co2_fastfood = fast_food_meals * 4 * 4  # 4 weeks, 4 kg per meal
+
+print("Meat CO₂:", co2_meat)
+print("Fast-food CO₂:", co2_fastfood)
+co2_food = co2_meat + co2_fastfood
+
+#Total carbon emitted
+total_co2 = total_electricity + co2_cooking + co2_transport  + co2_food
+
+print("\n🌍♻ Your Total Estimated Daily Carbon Footprint:", total_co2, "kg CO₂e 🌍♻")
+import pandas as pd
+import numpy as np
+
+# Load the dataset
+file_name = 'india carbon report.csv'
+df = pd.read_csv(r'C:\Users\ARYA\Downloads\india carbon report.csv')
+
+#  Type Conversion (Numeric Columns) 
+
+numeric_cols = [
+    'Age', 'Electricity_kWh', 'Cooking_Fuel_Units', 'AC_Rating', 
+    'AC_Usage_Hours', 'Daily_Travel_km', 'Domestic_Flights_Yrs', 
+    'International_Flights_Yrs', 'Avg_Flight_Distance_km', 'Meat_Kg_Month', 
+    'Fast_Food_Meals_Wk', 'CO2_Electricity', 'CO2_AC', 
+    'CO2_Cooking_Monthly', 'CO2_Car', 'CO2_Scooter', 
+    'CO2_Public_Transport', 'CO2_Flights_Yearly', 'CO2_Meat_Monthly', 
+    'CO2_FastFood_Monthly', 'Total_CO2_Daily_Estimate'
+]
+
+
+for col in numeric_cols:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+ 
+
+standardize_cols = [
+    'Mode_of_Transport', 
+    'Take_Flights', 
+    'Eat_Meat'
+]
+
+for col in standardize_cols:
+   
+    df[col] = df[col].astype(str).str.lower()
+    
+# . Output
+print("Data Types after Cleaning:")
+df.info()
+
+print("\nFirst 5 rows after Cleaning:")
+print(df.head())
+
+# Save the cleaned DataFrame to a new CSV file
+cleaned_data = 'india_carbon_report_cleaned.csv'
+df.to_csv(cleaned_data, index=False)
+
+print(f"\nCleaned data saved to: {cleaned_data}")
+
+print("\n Graphical analysis of Daily Carbon Footprint:")
+import matplotlib.pyplot as plt
+import numpy as np
+# data
+y1 = np.array([5.902,12.68,1.22,30.4])
+y2 = np.array([ total_electricity,co2_cooking ,co2_transport,co2_food])
+
+# categories for X-axis
+categories = ["electricity",  "cooking", "transport", "food"]
+
+# plot lines with colors
+plt.plot(categories, y1, marker='o', color='green', label="average co2 emission")
+plt.plot(categories, y2, marker='o', color='pink', label="yours")
+
+# labels
+plt.xlabel("Categories")
+plt.ylabel("Avg CO₂ Emission")
+plt.title("Category-wise CO₂ Emission")
+plt.legend()
+
+plt.show()
+
+# pie chart 
+y = np.array([total_electricity,co2_cooking ,co2_transport,co2_food])
+mylabels = ["electricity",  "cooking", "transport", "food"]
+plt.pie(y, labels = mylabels)
+
+plt.pie(y)
+plt.show()
